@@ -1,0 +1,154 @@
+openapi: 3.0.0
+info:
+  title: "Products API"
+  version: "1.0.0"
+  description: "API documentation for product management"
+tags:
+  - name: Products
+    description: "API endpoints for managing products"
+paths:
+  /api/products:
+    get:
+      summary: "Retrieves a list of products"
+      tags:
+        - Products
+      responses:
+        '200':
+          description: "A list of products"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+    post:
+      summary: "Creates a new product"
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '201':
+          description: "Product created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: "Bad request"
+  /api/products/{id}:
+    get:
+      summary: "Retrieves a single product by ID"
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "The product ID"
+      responses:
+        '200':
+          description: "A single product"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: "Product not found"
+    put:
+      summary: "Updates an existing product"
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "The product ID"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductInput'
+      responses:
+        '200':
+          description: "Product updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          description: "Bad request"
+        '404':
+          description: "Product not found"
+    delete:
+      summary: "Deletes a product"
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "The product ID"
+      responses:
+        '200':
+          description: "Product deleted successfully"
+        '404':
+          description: "Product not found"
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "The auto-generated id of the product"
+        name:
+          type: string
+          description: "The name of the product"
+        description:
+          type: string
+          description: "The product description"
+        price:
+          type: number
+          description: "The price of the product"
+        imageUrl:
+          type: string
+          description: "The URL of the product image"
+        category:
+          type: string
+          description: "The category ID"
+        stock:
+          type: integer
+          description: "The number of items in stock"
+      required:
+        - name
+        - price
+    ProductInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        price:
+          type: number
+        imageUrl:
+          type: string
+        category:
+          type: string
+        stock:
+          type: integer
+      required:
+        - name
+        - price

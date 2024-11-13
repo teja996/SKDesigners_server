@@ -1,0 +1,11 @@
+# Paths from products.yaml
+$ref: './products.yaml#/paths'
+
+# Paths from categories.yaml
+$ref: './categories.yaml#/paths'
+
+# Paths from users.yaml
+$ref: './users.yaml#/paths'
+
+# Paths from orders.yaml
+$ref: './orders.yaml#/paths'

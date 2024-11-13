@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  title: "Orders API"
+  version: "1.0.0"
+  description: "API documentation for order management"
+tags:
+  - name: Orders
+    description: "API endpoints for managing orders"
+paths:
+  /api/orders:
+    post:
+      summary: "Creates a new order"
+      tags:
+        - Orders
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderInput'
+      responses:
+        '201':
+          description: "Order created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '400':
+          description: "Bad request"
+    get:
+      summary: "Retrieves all orders (Admin only)"
+      tags:
+        - Orders
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: "List of all orders"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          description: "Unauthorized"
+  /api/orders/myorders:
+    get:
+      summary: "Retrieves the authenticated user's orders"
+      tags:
+        - Orders
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: "List of user's orders"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          description: "Unauthorized"
+  /api/orders/{id}:
+    get:
+      summary: "Retrieves an order by ID"
+      tags:
+        - Orders
+      security:
+        - BearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: "The order ID"
+      responses:
+        '200':
+          description: "Order retrieved successfully"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+        '401':
+          description: "Unauthorized"
+        '404':
+          description: "Order not found"
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Order:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Order ID"
+        user:
+          $ref: '#/components/schemas/UserRef'
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        totalPrice:
+          type: number
+          description: "Total price of the order"
+          example: 99.99
+        createdAt:
+          type: string
+          format: date-time
+          description: "Order creation date"
+        updatedAt:
+          type: string
+          format: date-time
+          description: "Order last update date"
+      required:
+        - user
+        - orderItems
+        - totalPrice
+    OrderInput:
+      type: object
+      properties:
+        orderItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItemInput'
+        totalPrice:
+          type: number
+          description: "Total price of the order"
+          example: 99.99
+      required:
+        - orderItems
+        - totalPrice
+    OrderItem:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/ProductRef'
+        quantity:
+          type: integer
+          description: "Quantity of the product"
+          example: 2
+      required:
+        - product
+        - quantity
+    OrderItemInput:
+      type: object
+      properties:
+        product:
+          type: string
+          description: "Product ID"
+          example: "60b8d295f1af4c23d8a5e8b1"
+        quantity:
+          type: integer
+          description: "Quantity of the product"
+          example: 2
+      required:
+        - product
+        - quantity
+    UserRef:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "User ID"
+        name:
+          type: string
+          description: "User's name"
+        email:
+          type: string
+          format: email
+          description: "User's email"
+    ProductRef:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: "Product ID"
+        name:
+          type: string
+          description: "Product name"
+        price:
+          type: number
+          description: "Product price"
+          example: 19.99

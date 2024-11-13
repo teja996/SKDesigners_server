@@ -1,0 +1,18 @@
+openapi: 3.0.0
+info:
+  title: "Children's Wear Store API"
+  version: "1.0.0"
+  description: "Comprehensive API documentation for the Children's Wear Store"
+servers:
+  - url: "http://localhost:5000"
+tags:
+  - name: Products
+    description: "API endpoints for managing products"
+  - name: Categories
+    description: "API endpoints for managing categories"
+  - name: Users
+    description: "API endpoints for managing users and authentication"
+  - name: Orders
+    description: "API endpoints for managing orders"
+paths: {}
+components: {}
